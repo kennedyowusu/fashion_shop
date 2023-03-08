@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::all();
+        $users = User::all();
+        return UserResource::collection($users);
     }
 
     /**
@@ -49,7 +51,7 @@ class UserController extends Controller
      */
     public function profile()
     {
-        return Auth::user();
+        return new UserResource(Auth::user());
     }
 
     /**

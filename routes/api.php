@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\API\AuthenticationController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +16,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:sanctum')->group(function () {
+
+    // User routes
+    Route::get('users', [UserController::class, 'index'])->name('users.index');
+    Route::get('users/{user}', [UserController::class, 'show'])->where('user', '[0-9]+')->name('users.show');
+    Route::put('users/{user}', [UserController::class, 'update'])->where('user', '[0-9]+')->name('users.update');
+    Route::delete('users/{user}', [UserController::class, 'destroy'])->where('user', '[0-9]+')->name('users.destroy');
+
+    Route::get('profile', [UserController::class, 'profile'])->name('users.profile');
+    Route::put('profile', [UserController::class, 'updateProfile'])->name('users.updateProfile');
+
+    // Logout route
+    Route::post('logout', [AuthenticationController::class, 'logout'])->name('auth.logout');
 });
+
+
+// Public routes
+Route::post('register', [AuthenticationController::class, 'register']);
+Route::post('login', [AuthenticationController::class, 'login']);

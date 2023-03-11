@@ -39,6 +39,7 @@ class ProductController extends Controller
         try {
             DB::beginTransaction();
             $product = Product::create($request->validated());
+            $this->saveImage($request->image, 'products', 300, 300);
             DB::commit();
             return new ProductResource($product);
         } catch (\Exception $e) {

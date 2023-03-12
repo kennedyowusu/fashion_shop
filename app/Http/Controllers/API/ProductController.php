@@ -8,6 +8,7 @@ use App\Http\Resources\ProductResource;
 use Illuminate\Support\Facades\DB;
 use App\Models\Product;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ProductController extends Controller
 {
@@ -61,7 +62,7 @@ class ProductController extends Controller
     {
         try {
             return new ProductResource($product);
-        } catch (\Exception $e) {
+        } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Product not found.'], 404);
         }
     }

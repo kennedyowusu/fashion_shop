@@ -12,6 +12,9 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    const ROLE_ADMIN = 'admin';
+    const ROLE_USER = 'user';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -21,6 +24,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'image',
+        'location',
+        'address',
+        'phone',
+        'role',
     ];
 
     /**
@@ -41,4 +49,23 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Get the validation rules for user fields.
+     *
+     * @return array
+     */
+    public static function getValidationRules(): array
+    {
+        return [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'phone' => ['required', 'string', 'max:10', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'location' => ['nullable', 'string', 'max:255'],
+            'address' => ['nullable', 'string', 'max:255'],
+            'image' => ['nullable', 'image', 'max:10240'],
+            'role' => ['nullable', 'in:'.self::ROLE_ADMIN.','.self::ROLE_USER],
+        ];
+    }
 }

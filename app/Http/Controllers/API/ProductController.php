@@ -79,8 +79,8 @@ class ProductController extends Controller
         try {
             DB::beginTransaction();
 
-            // Log the request data before attempting to update the products table
-            Log::info($request->validated());
+            // Log the validated request data before attempting to update the products table
+            Log::info('Validated Request Data: ' . json_encode($request->validated()));
 
             $product->update($request->validated());
             $this->saveImage($request->image, 'products', 300, 300);
@@ -94,6 +94,7 @@ class ProductController extends Controller
             return response()->json(['error' => 'Failed to update product.'], 500);
         }
     }
+
 
     /**
      * Remove the specified resource from storage.

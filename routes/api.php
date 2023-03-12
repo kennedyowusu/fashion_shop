@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\AuthenticationController;
+use App\Http\Controllers\API\OrderController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
@@ -42,6 +43,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('products', [ProductController::class, 'store'])->name('products.store');
     Route::put('products/{product}', [ProductController::class, 'update'])->where('product', '[0-9]+')->name('products.update');
     Route::delete('products/{product}', [ProductController::class, 'destroy'])->where('product', '[0-9]+')->name('products.destroy');
+
+    // Order routes
+    Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('orders/{order}', [OrderController::class, 'show'])->where('order', '[0-9]+')->name('orders.show');
+    Route::post('orders', [OrderController::class, 'store'])->name('orders.store');
+    Route::put('orders/{order}', [OrderController::class, 'update'])->where('order', '[0-9]+')->name('orders.update');
+    Route::delete('orders/{order}', [OrderController::class, 'destroy'])->where('order', '[0-9]+')->name('orders.destroy');
 
     // Logout route
     Route::post('logout', [AuthenticationController::class, 'logout'])->name('auth.logout');

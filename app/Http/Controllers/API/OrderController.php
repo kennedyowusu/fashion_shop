@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -73,7 +74,7 @@ class OrderController extends Controller
         }
     }
 
-    public function destroy(Order $order): \Illuminate\Http\JsonResponse
+    public function destroy(Order $order): JsonResponse
     {
         DB::beginTransaction();
 

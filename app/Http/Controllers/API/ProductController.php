@@ -104,8 +104,18 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        $product->delete();
+        DB::beginTransaction();
 
-        return response()->noContent();
+        try {
+            $product->delete();
+            DB::commit();
+
+            return response()->json(['message' => 'Product deleted.'], 200);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            
+            DB::rollBack();
+            return response()->json(['error' => 'Failed to delete product.'], 500);
+        }
     }
 }

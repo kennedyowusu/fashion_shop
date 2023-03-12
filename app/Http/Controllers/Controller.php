@@ -7,11 +7,9 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\URL;
-
+use Illuminate\Support\Str;
 
 class Controller extends BaseController
 {
@@ -19,13 +17,8 @@ class Controller extends BaseController
 
     public function saveImage(UploadedFile $image, $path = 'public', $resizeWidth = null, $resizeHeight = null)
     {
-        // Validate input
-        if (!$image->isValid()) {
-            throw new \InvalidArgumentException('Invalid image file');
-        }
-
-        // Generate a unique filename
-        $filename = time() . '.' . $image->getClientOriginalExtension();
+        // Sanitize the filename
+        $filename = time() . '_' . Str::slug($image->getClientOriginalName()) . '.' . $image->getClientOriginalExtension();
 
         // Store the image
         try {
@@ -37,8 +30,11 @@ class Controller extends BaseController
             throw new \RuntimeException('Error storing image file');
         }
 
+        // Use a Content Security Policy header
+        $response = response('', 200);
+        $response->header('Content-Security-Policy', 'default-src \'none\'; script-src \'self\'; connect-src \'self\'; img-src \'self\'; style-src \'self\'; font-src \'self\';');
+
         // Return the image URL
         return Storage::disk($path)->url($filename);
     }
 }
-

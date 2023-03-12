@@ -7,7 +7,7 @@ use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
 use Illuminate\Support\Facades\DB;
 use App\Models\Product;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -43,6 +43,9 @@ class ProductController extends Controller
             DB::commit();
             return new ProductResource($product);
         } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            Log::error($request->validated());
+
             DB::rollBack();
             return response()->json(['error' => 'Failed to create product.'], 500);
         }
@@ -63,7 +66,6 @@ class ProductController extends Controller
         }
     }
 
-
     /**
      * Update the specified resource in storage.
      *
@@ -76,14 +78,17 @@ class ProductController extends Controller
         try {
             DB::beginTransaction();
             $product->update($request->validated());
+            $this->saveImage($request->image, 'products', 300, 300);
             DB::commit();
             return new ProductResource($product);
         } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            Log::error($request->validated());
+
             DB::rollBack();
             return response()->json(['error' => 'Failed to update product.'], 500);
         }
     }
-
 
     /**
      * Remove the specified resource from storage.

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Log;
 
 class ProductRequest extends FormRequest
 {
@@ -21,6 +22,8 @@ class ProductRequest extends FormRequest
      */
     public function rules(): array
     {
+        Log::info('ProductRequest validation rules applied');
+
         return [
             'name' => 'required|string|max:255',
             'description' => 'required|string',

@@ -78,6 +78,10 @@ class ProductController extends Controller
     {
         try {
             DB::beginTransaction();
+
+            // Log the request data before attempting to update the products table
+            Log::info($request->validated());
+
             $product->update($request->validated());
             $this->saveImage($request->image, 'products', 300, 300);
             DB::commit();

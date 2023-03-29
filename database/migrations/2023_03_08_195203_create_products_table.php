@@ -18,6 +18,9 @@ return new class extends Migration
             $table->decimal('price', 8, 2);
             $table->integer('stock')->unsigned();
             $table->string('image');
+            $table->string('is_new')->default('no');
+            $table->string('is_featured')->default('no');
+            $table->string('is_popular')->default('no');
             $table->foreignId('category_id')->constrained('categories');
             $table->timestamps();
 

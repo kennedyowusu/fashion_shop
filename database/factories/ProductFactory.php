@@ -22,6 +22,9 @@ class ProductFactory extends Factory
             'price' => $this->faker->randomFloat(2, 0, 100),
             'stock' => $this->faker->randomNumber(2),
             'image' => $this->faker->imageUrl(),
+            'is_new' => $this->faker->boolean ? 'yes' : 'no',
+            'is_featured' => $this->faker->boolean ? 'yes' : 'no',
+            'is_popular' => $this->faker->boolean ? 'yes' : 'no',
             'category_id' => $this->faker->numberBetween(1, 5),
         ];
     }

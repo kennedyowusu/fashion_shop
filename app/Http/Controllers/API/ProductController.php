@@ -13,11 +13,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     protected $product;
 
     public function __construct(Product $product)
@@ -30,12 +26,11 @@ class ProductController extends Controller
         return ProductResource::collection($this->product->all());
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\ProductRequest  $request
-     * @return \Illuminate\Http\Response
-     */
+    public function categoryProducts(Category $category)
+    {
+        return ProductResource::collection($this->product->where('category_id', $category->id)->get());
+    }
+
     public function store(ProductRequest $request)
     {
         try {
@@ -53,12 +48,7 @@ class ProductController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
+
     public function show(Product $product)
     {
         try {
@@ -68,13 +58,7 @@ class ProductController extends Controller
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\ProductRequest  $request
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(ProductRequest $request, Product $product)
     {
         try {
@@ -97,12 +81,7 @@ class ProductController extends Controller
     }
 
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy(Product $product)
     {
         DB::beginTransaction();
@@ -118,11 +97,5 @@ class ProductController extends Controller
             DB::rollBack();
             return response()->json(['error' => 'Failed to delete product.'], 500);
         }
-    }
-
-    public function categoryProducts(Category $category)
-    {
-        $products = $category->products;
-        return response()->json($products);
     }
 }

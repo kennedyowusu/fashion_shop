@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
+use App\Models\Category;
 use Illuminate\Support\Facades\DB;
 use App\Models\Product;
 use Illuminate\Support\Facades\Log;
@@ -113,9 +114,15 @@ class ProductController extends Controller
             return response()->json(['message' => 'Product deleted.'], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-            
+
             DB::rollBack();
             return response()->json(['error' => 'Failed to delete product.'], 500);
         }
+    }
+
+    public function categoryProducts(Category $category)
+    {
+        $products = $category->products;
+        return response()->json($products);
     }
 }

@@ -26,11 +26,6 @@ class ProductController extends Controller
         return ProductResource::collection($this->product->all());
     }
 
-    public function categoryProducts(Category $category)
-    {
-        return ProductResource::collection($this->product->where('category_id', $category->id)->get());
-    }
-
     public function store(ProductRequest $request)
     {
         try {

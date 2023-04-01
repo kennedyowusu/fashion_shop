@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CategoryRequest;
 use App\Http\Resources\CategoryResource;
+use App\Http\Resources\ProductResource;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
@@ -14,6 +15,13 @@ class CategoryController extends Controller
         // Get all categories
         $category = Category::all();
         return CategoryResource::collection($category);
+    }
+
+    // Get Products by Category ID
+    public function getProductsByCategory(Category $category)
+    {
+        $products = $category->products;
+        return ProductResource::collection($products);
     }
 
     public function store(CategoryRequest $request)

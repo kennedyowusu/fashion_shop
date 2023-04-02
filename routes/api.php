@@ -1,11 +1,11 @@
 <?php
 
 use App\Http\Controllers\API\AuthenticationController;
+use App\Http\Controllers\API\CartController;
 use App\Http\Controllers\API\OrderController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -46,10 +46,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('products/{product}', [ProductController::class, 'destroy'])->where('product', '[0-9]+')->name('products.destroy');
 
     // Cart routes
-    Route::get('carts', [OrderController::class, 'getCart'])->name('carts.index');
-    Route::post('carts', [OrderController::class, 'addToCart'])->name('carts.store');
-    Route::put('carts/{product}', [OrderController::class, 'updateCart'])->where('product', '[0-9]+')->name('carts.update');
-    Route::delete('carts/{product}', [OrderController::class, 'removeFromCart'])->where('product', '[0-9]+')->name('carts.destroy');
+    Route::get('carts', [CartController::class, 'index'])->name('carts.index');
+    Route::post('carts', [CartController::class, 'store'])->name('carts.store');
+    Route::get('carts/{cart}', [CartController::class, 'show'])->name('carts.show');
+    Route::put('carts/{cart}', [CartController::class, 'update'])->name('carts.update');
+    Route::delete('carts/{cart}', [CartController::class, 'destroy'])->name('carts.destroy');
 
     // Order routes
     Route::get('orders', [OrderController::class, 'index'])->name('orders.index');

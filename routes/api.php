@@ -45,6 +45,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('products/{product}', [ProductController::class, 'update'])->where('product', '[0-9]+')->name('products.update');
     Route::delete('products/{product}', [ProductController::class, 'destroy'])->where('product', '[0-9]+')->name('products.destroy');
 
+    // Cart routes
+    Route::get('carts', [OrderController::class, 'getCart'])->name('carts.index');
+    Route::post('carts', [OrderController::class, 'addToCart'])->name('carts.store');
+    Route::put('carts/{product}', [OrderController::class, 'updateCart'])->where('product', '[0-9]+')->name('carts.update');
+    Route::delete('carts/{product}', [OrderController::class, 'removeFromCart'])->where('product', '[0-9]+')->name('carts.destroy');
+
     // Order routes
     Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('orders/{order}', [OrderController::class, 'show'])->where('order', '[0-9]+')->name('orders.show');

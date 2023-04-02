@@ -14,13 +14,20 @@ use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
+
+    protected $cart;
+
+    public function __construct(Cart $cart)
+    {
+        $this->cart = $cart;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $carts = Cart::all();
-        return response()->json($carts);
+        return CartResource::collection($this->cart->all());
     }
 
     /**

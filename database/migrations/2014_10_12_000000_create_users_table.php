@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('location')->nullable();
             $table->string('address')->nullable();
-            $table->string('phone')->unique();
+            $table->string('phone', 20)->unique();
             $table->string('role')->default(User::ROLE_USER);
             $table->rememberToken();
             $table->timestamps();

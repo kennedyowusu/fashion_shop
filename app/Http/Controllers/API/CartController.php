@@ -58,17 +58,18 @@ class CartController extends Controller
             $cart->save();
             $this->saveImage($request->image, 'carts', 300, 300);
             DB::commit();
+
             return new CartResource($cart);
         } catch (\Exception $e) {
-            // Log::error($e->getMessage());
-            // Log::error($request->validated());
-
-            // Log::info('Validated data:', $validatedData);
-            // Log::info('Product price:', $product->price);
-
             DB::rollBack();
-            return response()->json(['error' => 'Failed to create cart.'], 500);
+            return response()->json([
+                'error' => 'Failed to create cart.',
+                'message' => $e->getMessage(),
+                'line' => $e->getLine(),
+                'file' => $e->getFile(),
+            ], 500);
         }
+
     }
 
     /**

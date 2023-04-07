@@ -13,10 +13,11 @@ class Cart extends Model
     protected $fillable = [
         'name',
         'image',
-        'price',
+        'price' => 0,
         'quantity',
         'user_id',
         'product_id',
+        'total_price',
     ];
 
     // Relationship with User model

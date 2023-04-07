@@ -60,8 +60,11 @@ class CartController extends Controller
             DB::commit();
             return new CartResource($cart);
         } catch (\Exception $e) {
-            Log::error($e->getMessage());
-            Log::error($request->validated());
+            // Log::error($e->getMessage());
+            // Log::error($request->validated());
+
+            // Log::info('Validated data:', $validatedData);
+            // Log::info('Product price:', $product->price);
 
             DB::rollBack();
             return response()->json(['error' => 'Failed to create cart.'], 500);

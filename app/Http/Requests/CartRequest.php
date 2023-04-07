@@ -23,11 +23,11 @@ class CartRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
             'quantity' => 'required|integer|min:0',
             'image' => 'sometimes|image|max:2048|mimes:jpeg,png,gif',
             'user_id' => 'required|integer|exists:users,id',
             'product_id' => 'required|integer|exists:products,id',
+            'total_price' => 'sometimes|integer|min:0',
         ];
     }
 

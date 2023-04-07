@@ -26,6 +26,7 @@ class CartFactory extends Factory
             'quantity' => $this->faker->randomDigit,
             'user_id' => null,
             'product_id' => null,
+            'total_price' => 0,
         ];
     }
 

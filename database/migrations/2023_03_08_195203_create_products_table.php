@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description');
-            $table->decimal('price', 8, 2);
+            $table->decimal('price', 8, 2)->default(0.00);
             $table->integer('stock')->unsigned();
             $table->string('image');
             $table->string('is_new')->default('no');

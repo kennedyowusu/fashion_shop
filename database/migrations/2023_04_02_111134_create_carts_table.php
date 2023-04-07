@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('image');
-            $table->integer('price');
+            $table->decimal('price', 8, 2)->default(0.00);
             $table->integer('quantity')->default(0);
-            $table->integer('total_price')->default(0);
+            $table->decimal('total_price', 8, 2)->default(0.00);
 
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');

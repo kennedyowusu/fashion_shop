@@ -9,11 +9,15 @@ class Cart extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'price' => 'double',
+    ];
+
     // Fillable fields for mass assignment
     protected $fillable = [
         'name',
         'image',
-        'price' => 0,
+        'price',
         'quantity',
         'user_id',
         'product_id',

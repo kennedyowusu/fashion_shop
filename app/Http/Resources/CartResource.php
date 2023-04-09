@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class CartResource extends JsonResource
 {
@@ -14,10 +15,10 @@ class CartResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+            return [
             'id' => $this->id,
             'name' => $this->name,
-            'image' => $this->image,
+            'image' => Storage::url($this->image),
             'price' => $this->price,
             'quantity' => $this->quantity,
             'user_id' => $this->user_id,

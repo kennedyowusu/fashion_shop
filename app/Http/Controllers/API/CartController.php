@@ -56,7 +56,8 @@ class CartController extends Controller
             $cart->user_id = $user->id;
             $cart->price = $product->price;
             $cart->save();
-            $this->saveImage($request->image, 'carts', 300, 300);
+            $cart->image = $this->saveImage($request->file('image'), 'carts', 300, 300);
+            $cart->save();
             DB::commit();
 
             return new CartResource($cart);

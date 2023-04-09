@@ -20,12 +20,14 @@ class Controller extends BaseController
         // Sanitize the filename
         $filename = time() . '_' . Str::slug($image->getClientOriginalName()) . '.' . $image->getClientOriginalExtension();
 
+        $new_filename = $path . '/' . $filename;
+
         // Store the image
         try {
             $imageData = $resizeWidth && $resizeHeight
                 ? Image::make($image)->resize($resizeWidth, $resizeHeight)->encode()
                 : $image->get();
-            Storage::disk('public')->put($filename, $imageData);
+            Storage::disk('public')->put($new_filename, $imageData);
 
         } catch (\Exception $e) {
             throw new \RuntimeException('Error storing image file');
@@ -36,6 +38,6 @@ class Controller extends BaseController
         $response->header('Content-Security-Policy', 'default-src \'none\'; script-src \'self\'; connect-src \'self\'; img-src \'self\'; style-src \'self\'; font-src \'self\';');
 
         // Return the public URL for the saved image
-        return Storage::disk($path)->url($filename);
+        return $new_filename;
     }
 }

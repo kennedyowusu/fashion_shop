@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Actions\SaveImageAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
@@ -32,9 +31,7 @@ class ProductController extends Controller
         try {
             DB::beginTransaction();
             $product = Product::create($request->validated());
-            // $this->saveImage($request->image, 'products', 300, 300);
-            $action = new SaveImageAction();
-            $product->image = $action->execute($request->file('image'), 'products', 300, 300);
+            $this->saveImage($request->image, 'products', 300, 300);
             DB::commit();
             return new ProductResource($product);
         } catch (\Exception $e) {

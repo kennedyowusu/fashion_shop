@@ -22,6 +22,7 @@ class CartResource extends JsonResource
             'price' => $this->price,
             'quantity' => $this->quantity,
             'user_id' => $this->user_id,
+            'user' => new UserResource($this->whenLoaded('user')), // Include the user relationship
             'product_id' => $this->product_id,
             'total_price' => $this->total_price,
         ];

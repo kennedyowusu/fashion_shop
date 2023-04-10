@@ -24,11 +24,6 @@ class CartController extends Controller
         $this->cart = $cart;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * The index() method returns a collection of all the cart items using a CartResource collection.
-     */
     public function index()
     {
         $user = Auth::user();
@@ -36,17 +31,6 @@ class CartController extends Controller
         return CartResource::collection($carts);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * The store() method handles creating a new cart item. It starts a database transaction,
-     * validates the incoming data using the CartRequest form request, retrieves the currently authenticated user,
-     * fetches the Product model associated with the product ID submitted in the request,
-     * creates a new Cart instance with the validated data and sets the user_id and price attributes before saving to the database.
-     * It then commits the transaction, s
-     * aves the image (if any) and returns the newly created Cart resource as a CartResource.
-     *
-     */
     public function store(CartRequest $request)
     {
         try {
@@ -59,7 +43,6 @@ class CartController extends Controller
             $cart->price = $product->price;
             $cart->save();
             $cart->image = $this->saveImage($request->file('image'), 'carts', 300, 300);
-            $cart->carts()->save($cart);
             DB::commit();
 
             return new CartResource($cart);
@@ -75,40 +58,33 @@ class CartController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * The show() method retrieves a single Cart item using its ID and returns it as a CartResource.
-     * If the item is not found, it returns an error response.
-     *
-     */
     public function show(Cart $cart)
     {
         try {
-            return new CartResource($cart);
+            $user = Auth::user();
+            if($cart->user_id == $user->id) {
+                return new CartResource($cart);
+            } else {
+                return response()->json(['error' => 'Cart Item not found.'], 404);
+            }
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Cart Item not found.'], 404);
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * The update() method handles updating an existing Cart item. It starts a database transaction,
-     * validates the incoming data using the CartRequest form request,
-     * and updates the Cart model instance with the validated data.
-     * It then commits the transaction, saves the image (if any) and returns the updated Cart resource as a CartResource.
-     * If an error occurs, it logs the error, rolls back the transaction and returns an error response.
-     *
-     */
     public function update(CartRequest $request, Cart $cart)
     {
         try {
             DB::beginTransaction();
-            $cart->update($request->validated());
-            $this->saveImage($request->image, 'carts', 300, 300);
-            DB::commit();
-            return new CartResource($cart);
+            $user = Auth::user();
+            if($cart->user_id == $user->id) {
+                $cart->update($request->validated());
+                $this->saveImage($request->image, 'carts', 300, 300);
+                DB::commit();
+                return new CartResource($cart);
+            } else {
+                return response()->json(['error' => 'Failed to update cart.'], 500);
+            }
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             Log::error($request->all());
@@ -118,28 +94,19 @@ class CartController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * The destroy() method handles deleting an existing Cart item.
-     * It starts a database transaction, deletes the Cart model instance and commits the transaction.
-     * If an error occurs, it logs the error, rolls back the transaction and returns an error response.
-     * Otherwise, it returns a success message as a JSON response.
-     *
-     */
     public function destroy(Cart $cart)
     {
-        DB::beginTransaction();
-
         try {
-            $cart->delete();
-            DB::commit();
-            return response()->json(['message' => 'Cart Item deleted successfully.'], 200);
+            $user = Auth::user();
+            if ($cart->user_id === $user->id) {
+                $cart->delete();
+                return response()->json(['message' => 'Cart item deleted successfully'], 200);
+            } else {
+                return response()->json(['error' => 'You do not have permission to delete this cart item.'], 403);
+            }
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-
-            DB::rollBack();
-            return response()->json(['error' => 'Failed to delete cart.'], 500);
+            return response()->json(['error' => 'Failed to delete cart item.'], 500);
         }
     }
 

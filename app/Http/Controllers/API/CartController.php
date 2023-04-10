@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
+use App\Actions\SaveImageAction;
 
 class CartController extends Controller
 {
@@ -44,7 +45,10 @@ class CartController extends Controller
             $cart->user_id = $user->id;
             $cart->price = $product->price;
             $cart->save();
-            $cart->image = $this->saveImage($request->file('image'), 'carts', 300, 300);
+            // $cart->image = $this->saveImage($request->file('image'), 'carts', 300, 300);
+            $action = new SaveImageAction();
+            $cart->image = $action->execute($request->file('image'), 'carts', 300, 300);
+
             DB::commit();
 
             return new CartResource($cart);

@@ -31,7 +31,9 @@ class CartController extends Controller
      */
     public function index()
     {
-        return CartResource::collection($this->cart->all());
+        $user = Auth::user();
+        $carts = $this->cart->where('user_id', $user->id)->get();
+        return CartResource::collection($carts);
     }
 
     /**

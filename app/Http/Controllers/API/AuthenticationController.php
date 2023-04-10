@@ -35,6 +35,7 @@ class AuthenticationController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'Bearer',
+            'user_id' => $user->id, // Add the user ID to the response
             'user' => $user,
         ]);
     }
@@ -64,6 +65,7 @@ class AuthenticationController extends Controller
                 'access_token' => $token,
                 'token_type' => 'Bearer',
                 'user' => $user,
+                'user_id' => $user->id, // add user ID to response
             ]);
         }
 

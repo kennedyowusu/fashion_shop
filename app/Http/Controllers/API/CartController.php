@@ -24,6 +24,7 @@ class CartController extends Controller
         $this->cart = $cart;
     }
 
+    // This method returns a collection of all the cart items for the authenticated user.
     public function index()
     {
         $user = Auth::user();
@@ -31,6 +32,7 @@ class CartController extends Controller
         return CartResource::collection($carts);
     }
 
+    // This method creates a new cart item for the authenticated user.
     public function store(CartRequest $request)
     {
         try {
@@ -58,26 +60,35 @@ class CartController extends Controller
 
     }
 
+    // This method returns a single cart item for the authenticated user.
     public function show(Cart $cart)
     {
         try {
             $user = Auth::user();
+            // Check if the cart item belongs to the authenticated user
             if($cart->user_id == $user->id) {
+                // Return the cart item as a CartResource.
                 return new CartResource($cart);
             } else {
+                // Return a 404 error if the cart item does not belong to the authenticated user.
                 return response()->json(['error' => 'Cart Item not found.'], 404);
             }
         } catch (ModelNotFoundException $e) {
+            // Return a 404 error if the cart item does not exist.
             return response()->json(['error' => 'Cart Item not found.'], 404);
         }
     }
 
+    // This method updates a single cart item for the authenticated user.
     public function update(CartRequest $request, Cart $cart)
     {
         try {
             DB::beginTransaction();
             $user = Auth::user();
+
+            // Check if the cart item belongs to the authenticated user.
             if($cart->user_id == $user->id) {
+                // Update the cart item with the validated request data.
                 $cart->update($request->validated());
                 $this->saveImage($request->image, 'carts', 300, 300);
                 DB::commit();
@@ -94,10 +105,12 @@ class CartController extends Controller
         }
     }
 
+    // This method deletes a single cart item for the authenticated user.
     public function destroy(Cart $cart)
     {
         try {
             $user = Auth::user();
+            // Check if the cart item belongs to the authenticated user.
             if ($cart->user_id === $user->id) {
                 $cart->delete();
                 return response()->json(['message' => 'Cart item deleted successfully'], 200);

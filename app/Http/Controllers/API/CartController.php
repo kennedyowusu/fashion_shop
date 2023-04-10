@@ -48,7 +48,7 @@ class CartController extends Controller
             // $cart->image = $this->saveImage($request->file('image'), 'carts', 300, 300);
             $action = new SaveImageAction();
             $cart->image = $action->execute($request->file('image'), 'carts', 300, 300);
-
+            $cart->save();
             DB::commit();
 
             return new CartResource($cart);

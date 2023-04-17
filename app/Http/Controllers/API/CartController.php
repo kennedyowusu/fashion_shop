@@ -11,6 +11,7 @@ use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
@@ -62,7 +63,6 @@ class CartController extends Controller
                 'file' => $e->getFile(),
             ], 500);
         }
-
     }
 
     // This method returns a single cart item for the authenticated user.
@@ -85,18 +85,22 @@ class CartController extends Controller
     }
 
     // This method updates a single cart item for the authenticated user.
-    public function update(CartRequest $request, Cart $cart)
+    public function update(Request $request, Cart $cart)
     {
         try {
             DB::beginTransaction();
             $user = Auth::user();
 
+            Log::debug('Authenticated user: ' . json_encode($user));
+            Log::debug('Cart user: ' . json_encode($cart->user));
+
             // Check if the cart item belongs to the authenticated user.
-            if($cart->user_id == $user->id) {
-                // Update the cart item with the validated request data.
-                $cart->update($request->validated());
-                $this->saveImage($request->image, 'carts', 300, 300);
-                DB::commit();
+            if ($cart->user_id == $user->id) {
+                // Update the cart item with the new quantity.
+                $cart->quantity = $request->input('quantity');
+                $cart->save();
+
+                Log::debug('Updated cart: ' . json_encode($cart));
                 return new CartResource($cart);
             } else {
                 return response()->json(['error' => 'Failed to update cart.'], 500);
@@ -104,11 +108,10 @@ class CartController extends Controller
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             Log::error($request->all());
-
-            DB::rollBack();
             return response()->json(['error' => 'Failed to update cart.'], 500);
         }
     }
+
 
     // This method deletes a single cart item for the authenticated user.
     public function destroy(Cart $cart)

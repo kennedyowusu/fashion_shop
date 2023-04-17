@@ -44,6 +44,7 @@ class CartController extends Controller
             $cart = new Cart($validatedData);
             $cart->user_id = $user->id;
             $cart->price = $product->price;
+            $cart->quantity = $validatedData['quantity'];
             $cart->save();
             // $cart->image = $this->saveImage($request->file('image'), 'carts', 300, 300);
             $action = new SaveImageAction();

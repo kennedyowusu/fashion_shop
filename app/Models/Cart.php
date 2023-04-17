@@ -53,4 +53,11 @@ class Cart extends Model
     {
         return $this->getTotalPriceAttribute() . ' ' . config('app.currency');
     }
+
+    protected static function booted()
+    {
+        static::updating(function ($cart) {
+            $cart->total_price = $cart->price * $cart->quantity;
+        });
+    }
 }

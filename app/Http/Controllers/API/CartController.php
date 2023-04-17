@@ -54,13 +54,15 @@ class CartController extends Controller
             DB::commit();
 
             return new CartResource($cart);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'error' => 'Product not found',
+                'message' => $e->getMessage(),
+            ], 404);
         } catch (\Exception $e) {
-            DB::rollBack();
             return response()->json([
                 'error' => 'Failed to create cart.',
                 'message' => $e->getMessage(),
-                'line' => $e->getLine(),
-                'file' => $e->getFile(),
             ], 500);
         }
     }

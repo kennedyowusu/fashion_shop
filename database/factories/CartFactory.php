@@ -21,7 +21,6 @@ class CartFactory extends Factory
     {
         return [
             'name' => $this->faker->name,
-            'image' => $this->faker->imageUrl(),
             'price' => $this->faker->randomFloat(2, 0, 1000),
             'quantity' => $this->faker->randomDigit,
             'user_id' => null,

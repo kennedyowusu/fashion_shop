@@ -16,7 +16,6 @@ class Cart extends Model
     // Fillable fields for mass assignment
     protected $fillable = [
         'name',
-        'image',
         'price',
         'quantity',
         'user_id',

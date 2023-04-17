@@ -48,7 +48,7 @@ class CartController extends Controller
             $cart->quantity = $validatedData['quantity'];
             $cart->save();
             $action = new SaveImageAction();
-            $cart->image = $action->execute($request->file('image'), 'carts', 300, 300);
+            // $cart->image = $action->execute($request->file('image'), 'carts', 300, 300);
             $cart->save();
             DB::commit();
 

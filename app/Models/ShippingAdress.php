@@ -14,6 +14,9 @@ class ShippingAdress extends Model
         'address_line_1',
         'address_line_2',
         'phone',
+        'city',
+        'state',
+        'zip',
     ];
 
     public function user()
@@ -44,6 +47,18 @@ class ShippingAdress extends Model
     public function getFullAddressWithPhoneAndNameAndIdAttribute()
     {
         return "{$this->id} {$this->name} " . $this->concatenateAddress() . " {$this->phone}";
+    }
+
+    public function getShippingAddress(int $userId, array $data): bool
+    {
+        return self::where('user_id', $userId)
+            ->where('name', $data['name'])
+            ->where('address_line_1', $data['address_line_1'])
+            ->where('phone', $data['phone'])
+            ->where('city', $data['city'])
+            ->where('state', $data['state'])
+            ->where('zip', $data['zip'])
+            ->exists();
     }
 
 }

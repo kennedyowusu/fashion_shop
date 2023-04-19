@@ -4,6 +4,7 @@ use App\Http\Controllers\API\AuthenticationController;
 use App\Http\Controllers\API\CartController;
 use App\Http\Controllers\API\OrderController;
 use App\Http\Controllers\API\ProductController;
+use App\Http\Controllers\API\ShippingAddressController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -51,6 +52,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('carts/{cart}', [CartController::class, 'show'])->name('carts.show');
     Route::put('carts/{cart}', [CartController::class, 'update'])->name('carts.update');
     Route::delete('carts/{cart}', [CartController::class, 'destroy'])->name('carts.destroy');
+
+    // Shipping address routes
+    Route::get('shipping-address', [ShippingAddressController::class, 'index'])->name('shipping-address.index');
+    Route::get('shipping-address/{shippingAddress}', [ShippingAddressController::class, 'show'])->where('shippingAddress', '[0-9]+')->name('shipping-address.show');
+    Route::post('shipping-address', [ShippingAddressController::class, 'store'])->name('shipping-address.store');
+    Route::put('shipping-address/{shippingAddress}', [ShippingAddressController::class, 'update'])->where('shippingAddress', '[0-9]+')->name('shipping-address.update');
+    Route::delete('shipping-address/{shippingAddress}', [ShippingAddressController::class, 'destroy'])->where('shippingAddress', '[0-9]+')->name('shipping-address.destroy');
 
     // Order routes
     Route::get('orders', [OrderController::class, 'index'])->name('orders.index');

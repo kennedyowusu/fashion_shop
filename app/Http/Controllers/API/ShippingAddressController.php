@@ -190,7 +190,20 @@ class ShippingAddressController extends Controller
     public function destroy(ShippingAdress $shippingAdress)
     {
         try {
+
+            $shippingAdress = ShippingAdress::find($shippingAdress);
+            if (!$shippingAdress) {
+                return response([
+                    'error' => 'Not Found',
+                    'message' => 'Shipping Address not found',
+                ], 404);
+            }
+
             $user = Auth::user();
+
+            // print the shipping address object
+            // dd($shippingAdress);
+            // dd($shippingAdress->user_id, $user->id);
             if ($shippingAdress->user_id !== $user->id) {
                 return response([
                     'error' => 'Unauthorized',

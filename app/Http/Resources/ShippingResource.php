@@ -15,6 +15,7 @@ class ShippingResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id,
             'name' => $this->name,
             'address_line_1' => $this->address_line_1,
             'address_line_2' => $this->address_line_2,

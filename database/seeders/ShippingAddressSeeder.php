@@ -2,8 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Http\Requests\ShippingAddress;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\ShippingAdress;
 use Illuminate\Database\Seeder;
 
 class ShippingAddressSeeder extends Seeder
@@ -13,6 +12,6 @@ class ShippingAddressSeeder extends Seeder
      */
     public function run(): void
     {
-        ShippingAddress::factory()->count(5)->create();
+        ShippingAdress::factory()->count(5)->create();
     }
 }
